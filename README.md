@@ -59,7 +59,7 @@
 
 <h2>Contributing</h2>
 
-<p>Contributions are welcome! Please fork the repository and submit a pull request with your changes.</p>
+<p>Contributions are welcome!</p>
 
 <h2>License</h2>
 
