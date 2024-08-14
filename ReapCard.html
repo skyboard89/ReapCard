@@ -155,10 +155,10 @@
     
         <h3>Tools:</h3>
         <ul>
-            <li><strong>Add Rectangle Box</strong>: Adds a rectangular box to the canvas. This box can be resized and positioned anywhere on the layout. It will be filled with data from the corresponding column in the Excel file during generation.</li>
-            <li><strong>Add Text Element</strong>: Adds a text element. You can customize the content, color, and size of the text. The text content will be dynamically replaced with data from the Excel file.</li>
+            <li><strong>Add Rectangle Box</strong>: Adds a rectangular box to the canvas. This box can be resized and positioned anywhere on the layout. It will be filled with data from the corresponding column (name of the box = column) in the Excel file during generation.</li>
+            <li><strong>Add Text Element</strong>: Adds a text element. You can customize the content, color, and size of the text. The text content will be dynamically replaced with data from the Excel file(name of the text = column).</li>
             <li><strong>Add Image</strong>: Allows you to upload and add a specific image to the canvas. This image can be resized and positioned.</li>
-            <li><strong>Add Image-Box</strong>: Adds a placeholder that will be dynamically filled with images based on filenames in your Excel data.</li>
+            <li><strong>Add Image-Box</strong>: Adds a placeholder that will be dynamically filled with images based on filenames in your Excel data.(name of the box = column)</li>
             <li><strong>Upload Pictures</strong>: Upload multiple image files to be used during card generation.</li>
             <li><strong>Undo</strong>: Reverts the last action.</li>
             <li><strong>Redo</strong>: Reapplies the last undone action.</li>
@@ -170,7 +170,7 @@
         <h3>Create Cards:</h3>
         <ul>
             <li><strong>Generate XLSX Template</strong>: Creates an Excel template file based on the current canvas elements, which can be used to input card data.</li>
-            <li><strong>XLSX Upload</strong>: Upload your Excel file containing data for the card generation process.</li>
+            <li><strong>XLSX Upload</strong>: Upload your Excel file containing data for the card generation process. Make sure the name of your columns match the names of the element in the canvas.</li>
             <li><strong>Output Format</strong>: Choose between generating individual PNGs or arranging multiple cards on an A4 sheet.</li>
             <li><strong>Add Space Between Cards</strong>: Toggle adding space between cards when generating on A4 sheets. Helpfull for when you need to cut out cards.</li>
             <li><strong>Generate Cards</strong>: Starts generating cards based on your layout and the uploaded Excel data. Progress is displayed as the cards are generated.</li>
