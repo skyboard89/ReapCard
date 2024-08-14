@@ -30,6 +30,8 @@
 
 <p>Open <code>ReapCard.html</code> in your preferred web browser to start using the tool.</p>
 
+<p>Or just download the files and open the html in any browser or use a simple webserver.</p>
+
 <h2>Usage</h2>
 
 <ol>
