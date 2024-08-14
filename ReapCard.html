@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Card Generator</title>
+    <link rel="stylesheet" href="ReapCardstyles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body>
+    <div class="container">
+        <section class="canvas-section">
+            <h1>ReapCard - Rapid Prototyping for Card Layouts</h1>
+            <canvas id="layout-canvas" width="697" height="1075"></canvas>
+        </section>
+        <section class="controls-section">
+            <button type="button" class="collapsible">Canvas Settings</button>
+            <div class="content">
+                <div class="canvas-settings">
+                    <div class="button-group-canvas">
+                        <label for="canvas-width">
+                            <i class="fas fa-arrows-alt-h" style="color: #0071e3;"></i> Canvas Width (px):
+                        </label>
+                        <input type="number" id="canvas-width" value="697">
+                    </div>
+                    <div class="button-group-canvas">
+                        <label for="canvas-height">
+                            <i class="fas fa-arrows-alt-v" style="color: #0071e3;"></i> Canvas Height (px):
+                        </label>
+                        <input type="number" id="canvas-height" value="1075">
+                    </div>
+                    <div class="button-group-canvas">
+                        <label for="canvas-radius">
+                            <i class="fas fa-square" style="color: #0071e3;"></i> Round Corners (px):
+                        </label>
+                        <input type="number" id="canvas-radius" value="8">
+                    </div>
+                    <div class="button-group-canvas">
+                        <label for="canvas-bg-color">
+                            <i class="fas fa-fill-drip" style="color: #0071e3;"></i> Background Color:
+                        </label>
+                        <input type="color" id="canvas-bg-color" value="#ffffff">
+                    </div>
+                    <div class="button-group-canvas">
+                        <label for="canvas-standard-size">
+                            <i class="fas fa-th-list" style="color: #0071e3;"></i> Standard Sizes:
+                        </label>
+                        <select id="canvas-standard-size">
+                            <option value="">-- Select Standard Size --</option>
+                            <option value="696,1075">Skat (696x1075)</option>
+                            <option value="661,1181">Schafkopf (661x1181)</option>
+                            <option value="732,1181">Schnapsen (732x1181)</option>
+                            <option value="744,1038">Poker (international deck) (744x1038)</option>
+                            <option value="827,1417">Tarot (827x1417)</option>
+                            <option value="709,709">Memo (709x709)</option>
+                            <option value="685,1038">Bridge (685x1038)</option>
+                            <option value="543,779">Small Cards (543x779)</option>
+                            <option value="709,709">Square (709x709)</option>
+                            <option value="827,827">Square (large) (827x827)</option>
+                        </select>
+                    </div>
+                    <div class="button-group">
+                        <button id="apply-canvas-settings">
+                            <i class="fas fa-check"></i> Apply Canvas Settings
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <button type="button" class="collapsible">Tools</button>
+            <div class="content">
+                <h5><i class="fas fa-trash"></i> right click on an element to delete</h5>
+                <div class="button-group">
+                    <button id="add-box"><i class="fas fa-square"></i> Add Rectangle Box</button>
+                    <button id="add-text"><i class="fas fa-font"></i> Add Text Element</button>
+                    <button id="add-image"><i class="fas fa-image"></i> Add Image</button>
+                    <button id="add-image-box"><i class="fas fa-border-all"></i> Add Image-Box</button>
+                    <label class="file-upload"> <i class="fas fa-upload"></i>
+                        <input type="file" id="upload-images" multiple accept="image/*">
+                        Upload Pictures
+                    </label>
+                    <button id="undo"><i class="fas fa-undo"></i> Undo</button>
+                    <button id="redo"><i class="fas fa-redo"></i> Redo</button>
+                    <button id="preview"><i class="fas fa-eye"></i> Preview 1st Card</button>
+                    <button id="save-layout"> <i class="fas fa-save"></i> Save Current Layout</button>
+                    <button id="load-layout"><i class="fas fa-folder-open"></i> Load Existing Layout</button>
+                    <input type="file" id="load-layout-input" accept=".json">
+                </div>
+            </div>
+
+            <button type="button" class="collapsible">Create Cards</button>
+            <div class="content">
+                <button id="generate-xlsx-template" class="styled-button"><i class="fas fa-file-excel"></i> Generate XLSX Template based on canvas</button>
+                <div class="uploads">
+                    <label class="file-upload styled-upload"> 
+                        <i class="fas fa-file-excel"></i>
+                        <input type="file" id="xlsx-upload" accept=".xlsx">
+                        Upload XLSX File
+                    </label>
+                </div>
+                <div id="xlsx-upload-status" class="upload-status">
+                    <span id="uploaded-xlsx-status-text" class="status-text">No file uploaded</span>
+                </div>
+                <div class="output-format-section">
+                    <label for="output-format" class="output-format-label">Choose Output Format:</label>
+                    <select id="output-format" class="styled-select">
+                        <option value="single">Single PNGs</option>
+                        <option value="a4">Multiple on A4</option>
+                    </select>
+                </div>
+                <div class="spacing-toggle-section">
+                    <label for="card-spacing-toggle" class="spacing-toggle-label">
+                        <input type="checkbox" id="card-spacing-toggle" checked>
+                        Add space between cards (20px)
+                    </label>
+                </div>
+                <div id="grid-info"></div>
+                <button class="styled-button generate-button" id="generate-cards"><i class="fas fa-magic"></i> Generate Cards</button>
+                <div class="progress-section">
+                    <label for="progress-bar" class="progress-label">Progress:</label>
+                    <progress id="progress-bar" class="styled-progress" value="0" max="100"></progress>
+                </div>
+            </div>
+        </section>
+    </div>
+    <hr>
+    <div class="help-page">
+        <h1 class="h1-h">Rapid Prototyping: Card Layout Editor Guide</h1>
+        <p>This Card Layout Editor allows users to quickly design and generate custom cards using a flexible canvas interface. It supports adding various elements, importing data from Excel files, and batch-generating cards based on the layout and data provided.</p>
+        
+        <h2>Main Features:</h2>
+        <ul>
+            <li><strong>Canvas-Based Design</strong>: Easily design your card layouts on a canvas, adjusting dimensions, colors, and more.</li>
+            <li><strong>Element Addition</strong>: Add boxes, text, images, and image placeholders to your design.</li>
+            <li><strong>Undo/Redo Support</strong>: Easily correct mistakes with undo and redo functionality.</li>
+            <li><strong>Layout Saving/Loading</strong>: Save your layouts as JSON files and reload them later for further editing.</li>
+            <li><strong>Excel Integration</strong>: Import data from Excel files to dynamically generate cards.</li>
+            <li><strong>XLSX Template Generation</strong>: Automatically generate an Excel template based on your layout elements.</li>
+            <li><strong>Batch Card Generation</strong>: Generate cards in bulk, either as individual PNGs or arranged on A4 sheets.</li>
+            <li><strong>Preview Functionality</strong>: Preview the first card based on your current layout and data.</li>
+            <li><strong>Image Handling</strong>: Upload multiple images and dynamically insert them into your cards during generation.</li>
+        </ul>
+        
+        <h2>Button Explanations:</h2>
+    
+        <h3>Canvas Settings:</h3>
+        <ul>
+            <li><strong>Canvas Width/Height</strong>: Set the width and height of the canvas in pixels.</li>
+            <li><strong>Round Corners</strong>: Define the corner radius for your card layout.</li>
+            <li><strong>Background Color</strong>: Choose a background color for the canvas.</li>
+            <li><strong>Standard Sizes</strong>: Quickly set canvas size based on predefined card sizes (e.g., Poker, Tarot).</li>
+        </ul>
+    
+        <h3>Tools:</h3>
+        <ul>
+            <li><strong>Add Rectangle Box</strong>: Adds a rectangular box to the canvas. This box can be resized and positioned anywhere on the layout. It will be filled with data from the corresponding column in the Excel file during generation.</li>
+            <li><strong>Add Text Element</strong>: Adds a text element. You can customize the content, color, and size of the text. The text content will be dynamically replaced with data from the Excel file.</li>
+            <li><strong>Add Image</strong>: Allows you to upload and add a specific image to the canvas. This image can be resized and positioned.</li>
+            <li><strong>Add Image-Box</strong>: Adds a placeholder that will be dynamically filled with images based on filenames in your Excel data.</li>
+            <li><strong>Upload Pictures</strong>: Upload multiple image files to be used during card generation.</li>
+            <li><strong>Undo</strong>: Reverts the last action.</li>
+            <li><strong>Redo</strong>: Reapplies the last undone action.</li>
+            <li><strong>Preview 1st Card</strong>: Generates a preview of the first card using the current layout and the first row of your Excel data.</li>
+            <li><strong>Save Current Layout</strong>: Saves the current layout as a JSON file for future use.</li>
+            <li><strong>Load Existing Layout</strong>: Load a previously saved layout from a JSON file.</li>
+        </ul>
+    
+        <h3>Create Cards:</h3>
+        <ul>
+            <li><strong>Generate XLSX Template</strong>: Creates an Excel template file based on the current canvas elements, which can be used to input card data.</li>
+            <li><strong>XLSX Upload</strong>: Upload your Excel file containing data for the card generation process.</li>
+            <li><strong>Output Format</strong>: Choose between generating individual PNGs or arranging multiple cards on an A4 sheet.</li>
+            <li><strong>Add Space Between Cards</strong>: Toggle adding space between cards when generating on A4 sheets. Helpfull for when you need to cut out cards.</li>
+            <li><strong>Generate Cards</strong>: Starts generating cards based on your layout and the uploaded Excel data. Progress is displayed as the cards are generated.</li>
+        </ul>
+    
+        <h2>Usage Flow:</h2>
+        <ol>
+            <li><strong>Design Your Layout</strong>: Use the tools to add boxes, text, images, and picture boxes to the canvas.</li>
+            <li><strong>Upload Your Data</strong>: Use the XLSX Upload button to upload your Excel file containing card data.</li>
+            <li><strong>Upload Images</strong>: Upload any images needed for your card designs.</li>
+            <li><strong>Preview Your Card</strong>: Preview the first card to ensure the layout works with your data.</li>
+            <li><strong>Generate Cards</strong>: Generate your cards in the desired format.</li>
+            <li><strong>Save Your Layout</strong>: Save your layout for future edits or use.</li>
+        </ol>
+    
+        <p>This tool provides a powerful and intuitive interface for creating various types of cards, from game cards to business cards, ensuring consistency and efficiency in the design process.</p>
+        <p>Made with Claude AI, Copilot, GTP4o and a little bit of human skill ;) - by u/skyboard89 - visit: r/tabletopgamedesign</p>
+    </div>
+    <script src="ReapCardscript.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.16.9/xlsx.full.min.js"></script>
+</body>
+
+</html>

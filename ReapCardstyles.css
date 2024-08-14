@@ -1,0 +1,248 @@
+body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f7;
+            color: #1d1d1f;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: row; /* Ensure horizontal layout */
+            align-items: flex-start; /* Align content at the top */
+            min-height: 100vh; /* Allow container to grow with the content */
+            width: 100%;
+        }
+        .canvas-section {
+            flex: 2;
+            padding: 20px;
+            background-color: #ffffff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            width: 100%;
+            overflow: hidden;
+        }
+
+        .controls-section {
+            flex: 1;
+            padding: 20px;
+            background-color: #f5f5f7;
+            overflow-y: auto;
+        }
+
+        .collapsible {
+    border-radius: 8px; padding: 12px; background-color: #0071e3; color: #ffffff;
+            background-color: #0071e3;
+            color: white;
+            cursor: pointer;
+            padding: 10px;
+            width: 100%;
+            border: none;
+            text-align: left;
+            outline: none;
+            font-size: 18px;
+            border-radius: 5px;
+            margin-bottom: 5px;
+        }
+        
+        .collapsible:after {
+            content: '\002B';
+            font-size: 13px;
+            color: white;
+            float: right;
+            margin-left: 5px;
+        }
+        
+        .collapsible.active:after {
+            content: "\2212";
+        }
+        
+        .content {
+            padding: 0; /* Start with no padding */
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.2s ease-out, padding 0.2s ease-out;
+            background-color: #f5f5f7;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+        
+        .content.expanded {
+            padding: 18px; /* Apply padding only when expanded */
+        }
+        h1,
+        h2 {
+            font-weight: 600;
+        }
+
+        canvas {
+            border: 1px solid #d2d2d7;
+            border-radius: 8px;
+        }
+
+        button {
+            background-color: #0071e3;
+            color: #ffffff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-size: 14px;
+            margin: 5px 0;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        hr {
+            border: 0;
+            border-top: 2px dashed #bbb;
+        }
+
+        button:hover {
+            background-color: #0077ed;
+        }
+
+        .generate-button {
+            background-color: red;
+        }
+
+        input[type="file"] {
+            display: none;
+        }
+
+        .file-upload {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #e8e8ed;
+            color: #1d1d1f;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            width: 300px;
+        }
+
+        .file-upload:hover {
+            background-color: #d2d2d7;
+        }
+
+        select {
+            padding: 10px;
+            border-radius: 8px;
+            border: 1px solid #d2d2d7;
+            background-color: #ffffff;
+            font-size: 14px;
+        }
+
+        progress {
+            width: 100%;
+            height: 8px;
+            border-radius: 4px;
+            background-color: #e8e8ed;
+        }
+
+        progress::-webkit-progress-bar {
+            background-color: #e8e8ed;
+            border-radius: 4px;
+        }
+
+        progress::-webkit-progress-value {
+            background-color: #0071e3;
+            border-radius: 4px;
+        }
+
+        .button-group {
+            display: flex;
+            flex-wrap: wrap;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .button-group-canvas {
+            display: flex;
+            flex-wrap: wrap;
+            flex-direction: column;
+            gap: 10px;
+            padding-top: 10px;
+            padding-bottom: 10px;
+        }
+
+        .button-group button {
+            width: 300px;
+        }
+        .help-page {
+            padding: 20px;
+            background-color: #f5f5f7;
+            margin-top: 20px; /* Space between container and help-page */
+            clear: both; /* Ensure it moves down after the container */
+        }
+
+        .styled-button {
+    font-size: 16px; padding: 12px 24px; border-radius: 10px;
+            background-color: #0071e3;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            border-radius: 5px;
+            margin-top: 10px;
+            display: inline-block;
+            transition: background-color 0.3s;
+        }
+        
+        .styled-button:hover {
+            background-color: #005bb5;
+        }
+        
+        .styled-upload {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            color: #0071e3;
+            font-weight: bold;
+            transition: color 0.3s;
+        }
+        
+        .styled-upload:hover {
+            color: #005bb5;
+        }
+        
+        .upload-status {
+            margin-top: 10px;
+            margin-bottom: 10px;
+        }
+        
+        .status-text {
+            color: red;
+            font-weight: bold;
+        }
+        
+        .output-format-section,
+        .spacing-toggle-section,
+        .progress-section {
+            margin-top: 10px;
+            margin-bottom: 10px;
+        }
+        
+        .output-format-label,
+        .spacing-toggle-label,
+        .progress-label {
+            font-weight: bold;
+            margin-right: 10px;
+        }
+        
+        .styled-select {
+            padding: 5px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+        
+        .styled-progress {
+            width: 100%;
+            height: 20px;
+            border-radius: 5px;
+        }
+button:focus { outline: 2px solid #005bb5; }
