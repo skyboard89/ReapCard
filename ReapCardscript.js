@@ -7,10 +7,10 @@ let cardData = [];
 let imageFiles = {};
 
 if (!canvas) {
-    console.error('Canvas-Element nicht gefunden');
+    console.error('Canvas element not found');
 }
 if (!ctx) {
-    console.error('2D-Kontext nicht verfügbar');
+    console.error('2D context not available');
 }
 
 ctx.font = '16px Arial';
@@ -153,58 +153,52 @@ function redrawCanvas() {
     // Set the background color of the canvas
     ctx.fillStyle = canvas.style.backgroundColor || '#ffffff';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
+    
     elements.forEach(element => {
-    if (element.type === 'text' || element.type === 'box' || element.type === 'image-box') {
-        ctx.fillStyle = element.backgroundColor || 'white';
-        if (element.type === 'box') {
-            roundRect(ctx, element.x, element.y, element.width, element.height, 10, true, true);
-        } else if (element.type === 'text') {
-            // Gestrichelter Rahmen für Text
-            ctx.setLineDash([5, 5]);
-            ctx.strokeRect(element.x, element.y, element.width, element.height);
-            ctx.setLineDash([]);
-        }  else if (element.type === 'image-box') {
-            // Zeichne ein Kreuz in der Bild-Box
-            ctx.beginPath();
-            ctx.moveTo(element.x, element.y);
-            ctx.lineTo(element.x + element.width, element.y + element.height);
-            ctx.moveTo(element.x + element.width, element.y);
-            ctx.lineTo(element.x, element.y + element.height);
-            ctx.stroke();
-        } else {
-            ctx.fillStyle = element.fontColor || 'black';
-            fitTextToBox(ctx, element.content, element.x, element.y, element.width, element.height);
-        }
+        if (element.type === 'text' || element.type === 'box' || element.type === 'image-box') {
+            ctx.fillStyle = element.backgroundColor || 'white';
+            if (element.type === 'box') {
+                roundRect(ctx, element.x, element.y, element.width, element.height, 10, true, true);
+            } else if (element.type === 'text') {
+                ctx.setLineDash([5, 5]);
+                ctx.strokeRect(element.x, element.y, element.width, element.height);
+                ctx.setLineDash([]);
+            } else if (element.type === 'image-box') {
+                ctx.beginPath();
+                ctx.moveTo(element.x, element.y);
+                ctx.lineTo(element.x + element.width, element.y + element.height);
+                ctx.moveTo(element.x + element.width, element.y);
+                ctx.lineTo(element.x, element.y + element.height);
+                ctx.stroke();
+            } else {
+                ctx.fillStyle = element.fontColor || 'black';
+                fitTextToBox(ctx, element.content, element.x, element.y, element.width, element.height);
+            }
 
-        // Dynamische Anpassung der Schriftgröße
-        let fontSize = Math.min(element.width, element.height); // Beispielwerte, passe sie nach Bedarf an
-        let padding = 5; // Beispielwert, passe ihn nach Bedarf an
-        ctx.font = `${fontSize}px Arial`;
-        let textMetrics = ctx.measureText(element.content);
-        while ((textMetrics.width > element.width - 2 * padding || fontSize > element.height - 2 * padding) && fontSize > 0) {
-            fontSize--;
+            let fontSize = Math.min(element.width, element.height);
+            let padding = 5;
             ctx.font = `${fontSize}px Arial`;
-            textMetrics = ctx.measureText(element.content);
+            let textMetrics = ctx.measureText(element.content);
+            while ((textMetrics.width > element.width - 2 * padding || fontSize > element.height - 2 * padding) && fontSize > 0) {
+                fontSize--;
+                ctx.font = `${fontSize}px Arial`;
+                textMetrics = ctx.measureText(element.content);
+            }
+
+            const textX = element.x + element.width / 2;
+            const textY = element.y + element.height / 2;
+            ctx.textBaseline = 'middle';
+            ctx.textAlign = 'center';
+            ctx.fillStyle = element.fontColor || 'black';
+            ctx.fillText(element.content, textX, textY);
+        } else if (element.type === 'image' && element.image) {
+            ctx.drawImage(element.image, element.x, element.y, element.width, element.height);
         }
-
-        const textX = element.x + element.width / 2;
-        const textY = element.y + element.height / 2;
-        ctx.textBaseline = 'middle'; // Text vertikal zentrieren
-        ctx.textAlign = 'center'; // Text horizontal zentrieren
-        ctx.fillStyle = element.fontColor || 'black';
-        ctx.fillText(element.content, textX, textY);
-    } else if (element.type === 'image' && element.image) {
-        ctx.drawImage(element.image, element.x, element.y, element.width, element.height);
-    }
-    const handleSize = 15; // Increase handle size
-    ctx.fillStyle = 'black';
-    ctx.fillRect(element.x + element.width - handleSize / 2, element.y + element.height - handleSize / 2, handleSize, handleSize);
-});
+        const handleSize = 15;
+        ctx.fillStyle = 'black';
+        ctx.fillRect(element.x + element.width - handleSize, element.y + element.height - handleSize, handleSize, handleSize);
+    });
 }
-
-
-
-
 
 function roundRect(ctx, x, y, width, height, radius, fill, stroke) {
     ctx.beginPath();
@@ -362,11 +356,12 @@ canvas.addEventListener('mousedown', (e) => {
     );
 
     if (currentElement) {
-        const handleSize = 15; // Match the handle size here
-        const resizeHandleX = currentElement.x + currentElement.width - handleSize / 2;
-        const resizeHandleY = currentElement.y + currentElement.height - handleSize / 2;
+        const handleSize = 15; // Ensure this matches the handle size in redrawCanvas
+        const resizeHandleX = currentElement.x + currentElement.width - handleSize;
+        const resizeHandleY = currentElement.y + currentElement.height - handleSize;
 
-        if (x >= resizeHandleX && x <= resizeHandleX + handleSize && y >= resizeHandleY && y <= resizeHandleY + handleSize) {
+        if (x >= resizeHandleX && x <= resizeHandleX + handleSize &&
+            y >= resizeHandleY && y <= resizeHandleY + handleSize) {
             isResizing = true;
         } else {
             isDragging = true;
@@ -382,8 +377,8 @@ canvas.addEventListener('mousemove', (e) => {
         redrawCanvas();
     } else if (isResizing && currentElement) {
         const rect = canvas.getBoundingClientRect();
-        currentElement.width = e.clientX - rect.left - currentElement.x;
-        currentElement.height = e.clientY - rect.top - currentElement.y;
+        currentElement.width = Math.max(e.clientX - rect.left - currentElement.x, 10); // Ensure minimum width
+        currentElement.height = Math.max(e.clientY - rect.top - currentElement.y, 10); // Ensure minimum height
         redrawCanvas();
     }
 });
@@ -542,7 +537,7 @@ xlsxUpload.addEventListener('change', async (e) => {
                 const sheetName = workbook.SheetNames[0];
                 const worksheet = workbook.Sheets[sheetName];
                 cardData = XLSX.utils.sheet_to_json(worksheet);
-                console.log('Kartendaten geladen:', cardData);
+                console.log('Card data loaded:', cardData);
 
                 // Display the checkmark and file name
                 document.getElementById('uploaded-xlsx-status-text').textContent = `Uploaded: ${file.name}`;
@@ -572,7 +567,7 @@ xlsxUpload.addEventListener('change', async (e) => {
             const sheetName = workbook.SheetNames[0];
             const worksheet = workbook.Sheets[sheetName];
             cardData = XLSX.utils.sheet_to_json(worksheet);
-            console.log('Kartendaten geladen:', cardData);
+            console.log('Card data loaded:', cardData);
 
             // Display the checkmark and file name
             document.getElementById('uploaded-xlsx-name').textContent = file.name;
@@ -626,7 +621,7 @@ function handleImageUpload(event) {
         const file = files[i];
         imageFiles[file.name] = file;
     }
-    console.log('Bilderdaten geladen:', Object.keys(imageFiles));
+    console.log('Imagedate loaded:', Object.keys(imageFiles));
     // Prevent any potential default behavior
     event.preventDefault();
 }
@@ -651,13 +646,13 @@ uploadPicturesButton.addEventListener('click', (event) => {
 async function loadImage(imageName) {
     return new Promise((resolve, reject) => {
         if (!imageName) {
-            reject(new Error('Kein Bildname angegeben'));
+            reject(new Error('No Image Name provided'));
             return;
         }
 
         const file = imageFiles[imageName];
         if (!file) {
-            reject(new Error(`Bilddatei nicht gefunden: ${imageName}`));
+            reject(new Error(`Image not found: ${imageName}`));
             return;
         }
 
@@ -665,18 +660,18 @@ async function loadImage(imageName) {
         reader.onload = (event) => {
             const img = new Image();
             img.onload = () => {
-                console.log(`Bild erfolgreich geladen: ${imageName}`);
+                console.log(`Image loaded: ${imageName}`);
                 resolve(img);
             };
             img.onerror = (error) => {
-                console.error(`Fehler beim Laden des Bildes: ${imageName}`, error);
-                reject(new Error(`Konnte Bild nicht laden: ${imageName}`));
+                console.error(`error while loading the image: ${imageName}`, error);
+                reject(new Error(`cannot load image: ${imageName}`));
             };
             img.src = event.target.result;
         };
         reader.onerror = (error) => {
-            console.error(`Fehler beim Lesen der Bilddatei: ${imageName}`, error);
-            reject(new Error(`Fehler beim Lesen der Bilddatei: ${imageName}`));
+            console.error(`error while loading the imagefile: ${imageName}`, error);
+            reject(new Error(`error while loading the imagefile: ${imageName}`));
         };
         reader.readAsDataURL(file);
     });
@@ -832,7 +827,7 @@ async function generateCardsOnA4(cardBlobs) {
                         URL.revokeObjectURL(objectURL);
                     } else {
                         console.error("Failed to create blob for A4 page");
-                        alert("Fehler bei der Kartengenerierung: Konnte Blob nicht erstellen.");
+                        alert("Error generating cards: Could not create blob.");
                     }
                 }, 'image/png');
             }
@@ -847,7 +842,7 @@ async function generateCardsOnA4(cardBlobs) {
 
         img.onerror = (error) => {
             console.error("Failed to load image for card generation", error);
-            alert("Fehler bei der Kartengenerierung: Konnte Bild nicht laden.");
+            alert("Error generating cards: Could not load image.");
         };
 
         img.src = URL.createObjectURL(cardBlobs[i]);
@@ -857,12 +852,12 @@ async function generateCardsOnA4(cardBlobs) {
 /// Batch-Verarbeitung aller Karten
 generateButton.addEventListener('click', async () => {
     if (cardData.length === 0) {
-        alert('Bitte laden Sie zuerst eine XLSX-Datei hoch.');
+        alert('Please upload an XLSX file first.');
         return;
     }
 
     if (Object.keys(imageFiles).length === 0) {
-        alert('Bitte laden Sie zuerst die Bilddateien hoch.');
+        alert('Please upload an image file first.');
         return;
     }
 
@@ -893,10 +888,10 @@ generateButton.addEventListener('click', async () => {
             await generateCardsOnA4(cardBlobs);
         }
 
-        alert('Kartengenerierung abgeschlossen!');
+        alert('generating cards finished!');
     } catch (error) {
         console.error("Error during card generation:", error);
-        alert("Fehler bei der Kartengenerierung: " + error.message);
+        alert("Error during card generation: " + error.message);
     }
 });
 
@@ -952,7 +947,6 @@ async function previewCard(data) {
     return previewCanvas;
 }
 
-
 //Bild aus Excel Liste holen
 function addImageBox() {
     const imageBox = {
@@ -974,17 +968,17 @@ function addImageBox() {
 document.getElementById('preview').addEventListener('click', async () => {
     if (cardData.length > 0) {
         const previewCanvas = await previewCard(cardData[0]);
-        const previewWindow = window.open('', 'Kartenvorschau', 'width=697,height=1075');
+        const previewWindow = window.open('', 'Card Preview', 'width=697,height=1075');
         previewWindow.document.body.appendChild(previewCanvas);
     } else {
-        alert('Bitte laden Sie zuerst eine XLSX-Datei hoch.');
+        alert('Please upload an XLSX file first.');
     }
 });
 
 // Event-Listener für UI-Elemente
 document.getElementById('add-box').addEventListener('click', addBox);
 document.getElementById('add-text').addEventListener('click', () => {
-    addElement('text', 50, 50, 200, 30, 'Neuer Text');
+    addElement('text', 50, 50, 200, 30, 'New Text');
 });
 document.getElementById('add-image').addEventListener('click', addImage);
 document.getElementById('add-image-box').addEventListener('click', addImageBox);
