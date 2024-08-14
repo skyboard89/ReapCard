@@ -5,7 +5,7 @@
 <p><strong>ReapCard</strong> is a web-based tool that allows users to quickly design and generate custom card layouts using a flexible canvas interface. It supports adding various elements like text, images, and boxes, importing data from Excel files, and batch-generating cards based on the provided layout and data.</p>
 
 <h2>Features</h2>
-
+<img src="https://github.com/skyboard89/ReapCard/blob/main/docs/Overview-Image.png">
 <ul>
     <li><strong>Canvas-Based Design:</strong> Design your card layouts on a canvas with customizable dimensions, colors, and more.</li>
     <li><strong>Element Addition:</strong> Add boxes, text, images, and placeholders to your design.</li>
